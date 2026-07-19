@@ -345,8 +345,7 @@ async function callGeminiAPI(query, contextReviews) {
         if (response.ok) {
             const data = await response.json();
             const answer = data.answer || "";
-            const lines = answer.split("\n").map(l => l.trim()).filter(l => l.length > 0);
-            return lines.slice(0, 4).join("<br>");
+            return answer.trim().replace(/\n/g, "<br>");
         }
         
         // If the serverless endpoint is not found (status 404, e.g., running static http-server locally),
@@ -374,19 +373,21 @@ async function callGeminiAPI(query, contextReviews) {
     const reviewsText = contextReviews.map((r, i) => 
         `[${i+1}] (${r.source}, Rating: ${r.rating || 'N/A'}): "${r.text}"`
     ).join("\n");
+    const prompt = `You are a helpful customer research assistant analyzing reviews for Blinkit.
+Below are relevant customer reviews to help answer the question.
 
-    const prompt = `You are the Blinkit Growth Insights AI assistant. A user is asking about customer feedback.
-
-User question: "${query}"
-
-Here are real customer reviews/feedback relevant to this question:
+---
+CUSTOMER REVIEWS:
 ${reviewsText}
+---
 
-Instructions:
-- Answer in EXACTLY 3 to 4 lines. No more.
-- Be specific — reference actual complaints or praise from the reviews.
-- Do NOT repeat the question. Just answer directly.
-- If reviews don't cover the topic, say so briefly in 2 lines.`;
+USER QUESTION:
+"${query}"
+
+INSTRUCTIONS:
+1. Provide a direct, specific answer to the user's question using the customer reviews provided.
+2. If the reviews don't cover the topic, state that clearly in 1-2 lines.
+3. Keep your response brief, informative, and formatted as a single clear paragraph of 3-4 sentences. Do not mention any prompt constraints or formatting instructions in your output.`;
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
     const response = await fetch(url, {
@@ -405,8 +406,7 @@ Instructions:
     
     const data = await response.json();
     const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    const lines = answer.split("\n").map(l => l.trim()).filter(l => l.length > 0);
-    return lines.slice(0, 4).join("<br>");
+    return answer.trim().replace(/\n/g, "<br>");
 }
 
 // Trigger core preset question — now uses LLM
