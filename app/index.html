@@ -61,15 +61,26 @@
                 </div>
             </div>
 
-            <!-- Conversational Chat Thread -->
-            <div class="chat-thread-wrapper">
-                <div class="chat-thread-header">
-                    <span>Chat Log</span>
-                    <button class="clear-btn" id="clear-chat-btn">Clear Chat</button>
+            <!-- Active Chat Main Layout -->
+            <div class="chat-main-layout">
+                <!-- Conversational Chat Thread -->
+                <div class="chat-thread-wrapper">
+                    <div class="chat-thread-header">
+                        <span>Chat Log</span>
+                        <button class="clear-btn" id="clear-chat-btn">Clear Chat</button>
+                    </div>
+                    <div class="chat-thread-container" id="chat-thread">
+                        <div class="empty-state" id="chat-empty-state">
+                            <p>No queries started yet. Ask a custom question below or click a shortcut above.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="chat-thread-container" id="chat-thread">
-                    <div class="empty-state" id="chat-empty-state">
-                        <p>No queries started yet. Ask a custom question below or click a shortcut above.</p>
+
+                <!-- Suggested Questions Sidebar Column -->
+                <div class="chat-sidebar-suggestions" id="chat-sidebar-suggestions">
+                    <h4 class="suggestions-title">Suggested Inquiries</h4>
+                    <div class="suggestions-list" id="suggestions-list">
+                        <!-- Loaded dynamically via JS -->
                     </div>
                 </div>
             </div>

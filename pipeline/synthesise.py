@@ -397,7 +397,8 @@ def main():
         "clusters": clusters,
         "questions": questions_insights,
         "survey_stats": survey_stats,
-        "dashboard_metrics": dashboard_metrics
+        "dashboard_metrics": dashboard_metrics,
+        "reviews": reviews
     }
     
     # Save database JSON file

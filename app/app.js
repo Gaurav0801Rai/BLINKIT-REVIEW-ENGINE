@@ -143,6 +143,9 @@ function initApp() {
 
     // 5. Render Top User Needs Lists
     renderUserNeeds();
+
+    // 6. Render Sidebar Suggestions List in Chat view
+    renderSidebarSuggestions();
 }
 
 // Render Shortcut Core Questions in Assistant (Spotify style, only 4 by default + view more)
@@ -316,17 +319,31 @@ function getMatchingReviews(query) {
     const queryWords = queryLower.split(/\W+/).filter(w => w.length > 2);
     
     const results = [];
-    Object.keys(allReviewsMap).forEach(key => {
-        const quote = allReviewsMap[key];
-        const text = (quote.text || "").toLowerCase();
+    const reviewsList = (insightsData && insightsData.reviews) ? insightsData.reviews : [];
+    
+    reviewsList.forEach(r => {
+        const text = (r.text || "").toLowerCase();
         let score = 0;
         queryWords.forEach(w => {
             if (text.includes(w)) score++;
         });
         if (score > 0) {
-            results.push({ quote, score });
+            results.push({ quote: r, score });
         }
     });
+    
+    // Fallback to the representative quotes if no matching reviews are found
+    if (results.length === 0) {
+        Object.keys(allReviewsMap).forEach(key => {
+            const quote = allReviewsMap[key];
+            let score = 0;
+            queryWords.forEach(w => {
+                const text = (quote.text || "").toLowerCase();
+                if (text.includes(w)) score++;
+            });
+            results.push({ quote, score: score || 1 });
+        });
+    }
     
     results.sort((a, b) => b.score - a.score);
     return results.slice(0, 5).map(r => r.quote);
@@ -632,5 +649,20 @@ async function syncData() {
             syncDashboardBtn.textContent = "Refresh Data";
         }
     }
+}
+
+// Render Sidebar Suggestions List in Chat view
+function renderSidebarSuggestions() {
+    const list = document.getElementById("suggestions-list");
+    if (!list) return;
+    list.innerHTML = "";
+    
+    insightsData.questions.forEach(q => {
+        const btn = document.createElement("button");
+        btn.className = "suggestion-item-btn";
+        btn.innerHTML = `<span style="color: var(--brand-green); font-weight: bold; margin-right: 4px;">⚡</span> ${q.title}`;
+        btn.addEventListener("click", () => triggerCoreQuestion(q));
+        list.appendChild(btn);
+    });
 }
 
