@@ -20,14 +20,30 @@ module.exports = async (req, res) => {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    // Safely parse body in case Vercel body parser returns string or is bypassed
-    let body = req.body;
-    if (typeof body === 'string') {
-        try {
-            body = JSON.parse(body);
-        } catch (e) {}
+    // Manually read stream chunks to construct the request body in case Vercel body parser fails or is bypassed
+    let requestBody = '';
+    if (req.body) {
+        requestBody = req.body;
+    } else {
+        requestBody = await new Promise((resolve) => {
+            let data = '';
+            req.on('data', chunk => { data += chunk; });
+            req.on('end', () => { resolve(data); });
+        });
     }
-    const { query, contextReviews, clientApiKey } = body || {};
+
+    let payload = {};
+    if (typeof requestBody === 'object') {
+        payload = requestBody;
+    } else if (typeof requestBody === 'string' && requestBody.trim().length > 0) {
+        try {
+            payload = JSON.parse(requestBody);
+        } catch (e) {
+            console.error("JSON parsing error on request body:", e);
+        }
+    }
+
+    const { query, contextReviews, clientApiKey } = payload || {};
 
     const reviewsText = (contextReviews || []).map((r, i) => 
         `[${i+1}] (${r.source}, Rating: ${r.rating || 'N/A'}): "${r.text}"`
@@ -50,7 +66,6 @@ INSTRUCTIONS:
 3. Keep your answer professional, constructive, and grounded in the operational context of the reviews (e.g. referencing specific categories like fresh produce quality, cosmetics trust, diaper hygiene, or habit loops).
 4. Format your response as a single, well-structured, informative paragraph of 3 to 4 sentences. Do not mention these instructions or system constraints in your output.`;
 
-    // Prioritize server environment variables, fallback to client-forwarded keys
     const groqApiKey = process.env.GROQ_API_KEY || (clientApiKey && clientApiKey.startsWith("gsk_") ? clientApiKey : null);
     
     // 1. Prioritize Groq if a Groq key is configured
