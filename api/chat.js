@@ -66,27 +66,44 @@ INSTRUCTIONS:
 3. Keep your answer professional, constructive, and grounded in the operational context of the reviews (e.g. referencing specific categories like fresh produce quality, cosmetics trust, diaper hygiene, or habit loops).
 4. Format your response as a single, well-structured, informative paragraph of 3 to 4 sentences. Do not mention these instructions or system constraints in your output.`;
 
-    // Prioritize server environment variables, fallback to client-forwarded keys (with trimming to safeguard against copy-paste whitespace)
-    const rawGroqKey = process.env.GROQ_API_KEY || (clientApiKey && clientApiKey.startsWith("gsk_") ? clientApiKey : null);
-    const groqApiKey = rawGroqKey ? rawGroqKey.trim() : null;
+    const serverGroqKey = process.env.GROQ_API_KEY;
+    const clientGroqKey = clientApiKey && clientApiKey.startsWith("gsk_") ? clientApiKey : null;
     
-    // 1. Prioritize Groq if a Groq key is configured
-    if (groqApiKey) {
+    const groqKeys = Array.from(new Set([serverGroqKey, clientGroqKey].map(k => k ? k.trim() : null).filter(Boolean)));
+    
+    let groqSuccess = false;
+    let groqAnswer = "";
+    let groqError = null;
+    
+    // 1. Try Groq keys one by one (server key first, then client key fallback)
+    for (const key of groqKeys) {
         try {
-            const result = await makeGroqRequest(groqApiKey, prompt);
+            const result = await makeGroqRequest(key, prompt);
             if (result.statusCode === 200) {
                 const parsed = JSON.parse(result.body);
-                const answer = parsed.choices?.[0]?.message?.content || "";
-                return res.status(200).json({ answer });
+                groqAnswer = parsed.choices?.[0]?.message?.content || "";
+                groqSuccess = true;
+                break;
             } else {
-                return res.status(result.statusCode).json({
-                    error: `Groq API returned status ${result.statusCode} (Key used: ${groqApiKey ? groqApiKey.substring(0, 10) : 'none'}...)`,
-                    details: result.body
-                });
+                console.warn(`Groq request failed with status ${result.statusCode} for key: ${key.substring(0, 10)}...: ${result.body}`);
+                groqError = { statusCode: result.statusCode, body: result.body, keyPreview: key.substring(0, 10) };
             }
         } catch (err) {
-            return res.status(500).json({ error: `Groq request error: ${err.message}` });
+            console.error("Groq request error:", err);
+            groqError = { statusCode: 500, body: err.message, keyPreview: key.substring(0, 10) };
         }
+    }
+    
+    if (groqSuccess) {
+        return res.status(200).json({ answer: groqAnswer });
+    }
+    
+    // If Groq was attempted but failed, check if we should bubble up the 401 Invalid Key error
+    if (groqKeys.length > 0 && groqError && groqError.statusCode === 401) {
+        return res.status(401).json({
+            error: `Groq API returned status 401 (Invalid API Key). Key tried: ${groqError.keyPreview}...`,
+            details: groqError.body
+        });
     }
 
     // 2. Fall back to Gemini Key Rotation
