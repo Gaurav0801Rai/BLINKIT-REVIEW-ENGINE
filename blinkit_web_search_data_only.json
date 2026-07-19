@@ -1,0 +1,322 @@
+{
+  "metadata": {
+    "project": "Blinkit Cross-Category Discovery - Web Search Data Only",
+    "compiled_date": "2026-07-17",
+    "data_type": "web_search_extracted",
+    "sources_searched": [
+      "Trustpilot - Blinkit reviews",
+      "Reddit - r/FuckBlinkit, r/Coimbatore, r/india",
+      "Digital in Asia - India Quick Commerce 2026",
+      "Product Growth - India E-Commerce 2026",
+      "FounderPin - Blinkit Case Study 2026",
+      "Chryseum - Quick Commerce Industry Report",
+      "Beta to Alpha - Blinkit Analysis 2025",
+      "S&P Global - Blinkit Revenue Analysis 2026",
+      "DigiLawyer - Blinkit Consumer Complaints",
+      "Wikipedia - Blinkit",
+      "AmbitionBox - Blinkit Employee Reviews"
+    ],
+    "disclaimer": "All data extracted from publicly available web sources via search. No primary survey data included."
+  },
+  "market_data": {
+    "source": "Digital in Asia, Product Growth, FounderPin, S&P Global, Chryseum",
+    "india_quick_commerce_gmv_jan_2026": {
+      "value": "₹11,000 crore per month",
+      "yoy_growth": "~100%",
+      "daily_orders": "7.8 million",
+      "projected_cagr": "40-45% over next 3 years",
+      "source": "Redseer via Digital in Asia"
+    },
+    "annual_quick_commerce_gmv_2026": {
+      "value": "$5B+ (₹40,000+ crores)",
+      "source": "Product Growth"
+    },
+    "market_share_split": {
+      "blinkit": "45-50%",
+      "swiggy_instamart": "20-25%",
+      "zepto": "20-25%",
+      "note": "Estimates blend GMV and order-volume share from secondary trackers",
+      "source": "Digital in Asia"
+    },
+    "blinkit_gov_q1_fy26": {
+      "value": "₹11,821 crore",
+      "yoy_growth": "134%",
+      "comparison": "Overtook Zomato food delivery (₹10,769 crore) for first time",
+      "source": "Eternal Q1 FY26 results via Digital in Asia"
+    },
+    "blinkit_revenue_q3_fy26": {
+      "value": "₹12,256 crore",
+      "yoy_growth": "202%",
+      "source": "FounderPin"
+    },
+    "blinkit_profitability": {
+      "first_adjusted_ebitda_positive": "Q3 FY26",
+      "amount": "₹4 crore",
+      "source": "FounderPin"
+    },
+    "blinkit_dark_stores_march_2026": {
+      "count": 2027,
+      "target_2027": 3000,
+      "source": "FounderPin"
+    },
+    "blinkit_monthly_transacting_users": {
+      "value": "20.8 million",
+      "yoy_growth": "134%",
+      "source": "FounderPin"
+    },
+    "blinkit_average_order_value": {
+      "value": "₹524",
+      "trend": "Stable",
+      "source": "FounderPin"
+    },
+    "blinkit_peak_day_orders": {
+      "value": "7.5 million orders",
+      "occasion": "New Year's Eve",
+      "source": "FounderPin"
+    },
+    "blinkit_app_downloads": {
+      "value": "150 million+",
+      "source": "FounderPin"
+    },
+    "blinkit_geographic_concentration": {
+      "top_8_cities_gmv_share": "~90%",
+      "source": "Chryseum Report FY24"
+    },
+    "swiggy_instamart_gov_q4_fy25": {
+      "value": "₹4,670 crore",
+      "yoy_growth": "101%",
+      "adjusted_ebitda_loss": "₹840 crore",
+      "dark_stores_added": 316,
+      "source": "Swiggy Q4 FY25 results"
+    },
+    "zepto_fy25": {
+      "revenue": "₹9,668 crore",
+      "net_loss": "₹3,367 crore (177% increase)",
+      "valuation": "$7 billion",
+      "funding_raised": "$450 million (late 2025)",
+      "dark_stores": "1,000+",
+      "ipo_filing": "December 2025 (confidential)",
+      "source": "Entrackr via Digital in Asia"
+    },
+    "quick_commerce_projected_2030": {
+      "branded_retail_share": "~10%",
+      "source": "Redseer via Digital in Asia"
+    }
+  },
+  "user_reviews_trustpilot": {
+    "source_url": "https://www.trustpilot.com/review/blinkit.nl",
+    "overall_rating": "Very Low (1-2 stars dominant)",
+    "sample_reviews": [
+      {
+        "date": "2026-06-29",
+        "rating": 1,
+        "text": "BLINKIT IS A PURE FRAUD! TOTAL SCAM ALERT! Do NOT download this app and do NOT waste a single rupee on Blinkit!",
+        "theme": "fraud/scam"
+      }
+    ],
+    "common_complaints": [
+      "Fake products / fraud",
+      "Delivery fee and handling charges too high",
+      "Hidden fees",
+      "Device-based pricing discrimination"
+    ]
+  },
+  "user_reviews_reddit": {
+    "source_urls": [
+      "https://www.reddit.com/r/FuckBlinkit/",
+      "https://www.reddit.com/r/Coimbatore/comments/1jfjq1a/whats_your_review_on_blinkit_zepto_groceries_in/"
+    ],
+    "subreddit_r_fuckblinkit": {
+      "description": "A place for customers to share any unethical, frustrating experience or unfair pricing by Blinkit",
+      "themes": [
+        "hidden fees",
+        "device-based pricing",
+        "unethical practices"
+      ]
+    },
+    "sample_discussions": [
+      {
+        "subreddit": "r/Coimbatore",
+        "quote": "Zepto generally unreliable from my experience. Blinkit quality of vegetables and fruits is good if you order in the early morning itself (7-8 am)",
+        "theme": "quality_varies_by_time"
+      },
+      {
+        "subreddit": "r/FuckBlinkit",
+        "quote": "Blinkit charges 12 rupees delivery fee and 12 rupees handling charges even after order value of 199 in my area, that's the highest out of all",
+        "theme": "high_fees"
+      },
+      {
+        "subreddit": "r/FuckBlinkit",
+        "quote": "Blinkit is a scam. Tell me how to go to consumers forum",
+        "theme": "fraud_complaint"
+      }
+    ]
+  },
+  "consumer_complaints_digilawyer": {
+    "source_url": "https://digilawyer.ai/blogs/blinkit-consumer-complaint",
+    "date": "2026-03-02",
+    "top_complaints": [
+      {
+        "complaint": "Items Showing Out of Stock After Payment",
+        "description": "Product available while ordering, but refund issued later stating product unavailable"
+      },
+      {
+        "complaint": "Food Being Spoiled or Poor Packaging",
+        "description": "Stale food, improper packaging, cooked food leaking, milk packets curdled or past expiry"
+      },
+      {
+        "complaint": "Customer Support Not Responding",
+        "description": "Must chat with unhelpful bot first, delayed response, refund window expires, scripted answers"
+      },
+      {
+        "complaint": "Wrong or Incomplete Items Delivered",
+        "description": "Ordered 5 items, only 3 delivered. Delivery partner insists order complete. Support asks for proof of missing items."
+      },
+      {
+        "complaint": "Payment Issues",
+        "description": "Amount debited but order not placed, double charged, refund denied after cancellation within allowed time"
+      }
+    ]
+  },
+  "blinkit_business_model": {
+    "source": "FounderPin, Chryseum",
+    "revenue_streams": {
+      "direct_retail_margin_1p": "15-25% margin on retail sale",
+      "blinkit_ads_retail_media": "~3% of total GMV in FY26",
+      "customer_convenience_fees": "₹5-15 handling fee + variable delivery fee",
+      "brand_partnerships_sampling": "New launch bundles distributed to targeted households",
+      "blinkit_plus_subscription": "Unlimited free deliveries + priority access"
+    },
+    "unit_economics": {
+      "average_order_value": "₹524",
+      "delivery_cost": "₹40-50 per order",
+      "operations_cost": "₹20-25 per order",
+      "contribution_per_order": "~₹30",
+      "source": "Product Growth, FounderPin"
+    },
+    "take_rate": {
+      "value": "18% (climbing)",
+      "comparison_instamart": "13.58% (FY24)",
+      "source": "Beta to Alpha, Chryseum"
+    },
+    "dark_store_setup_cost": {
+      "upfront_capex": "₹6-7 million per store",
+      "throughput_per_day": "~₹8.5 lakh",
+      "source": "Chryseum"
+    }
+  },
+  "category_expansion_data": {
+    "source": "Digital in Asia, Product Growth, FounderPin",
+    "current_categories": [
+      "Groceries (atta, oil, vegetables)",
+      "Staples",
+      "Snacks",
+      "Medications",
+      "Personal care",
+      "Alcohol (select cities)",
+      "Premium electronics (Blinkit Tech)",
+      "Beauty (Blinkit Glam)",
+      "Home appliances",
+      "OTC medicines",
+      "Document printing"
+    ],
+    "non_grocery_growth": {
+      "growth_rate_vs_grocery": "1.6x faster",
+      "source": "FounderPin"
+    },
+    "zepto_category_expansion": {
+      "new_categories": [
+        "toys",
+        "beauty",
+        "cosmetics",
+        "low-ticket jewellery",
+        "fashion"
+      ],
+      "partnerships": "Decathlon India (sporting goods across 16 cities)",
+      "source": "Chryseum"
+    },
+    "path_to_profitability": {
+      "strategy": "Increase order value through frequency model and bundling",
+      "source": "Product Growth"
+    }
+  },
+  "competitive_intelligence": {
+    "source": "Digital in Asia, Chryseum, FounderPin",
+    "blinkit_vs_zepto_vs_instamart": {
+      "blinkit": {
+        "strengths": [
+          "Market leader 45-50%",
+          "First to profitability",
+          "2,027 dark stores",
+          "Zomato ecosystem"
+        ],
+        "weaknesses": [
+          "High fixed costs",
+          "Perishable logistics",
+          "Rider attrition"
+        ]
+      },
+      "zepto": {
+        "strengths": [
+          "Pure-play focus",
+          "$7B valuation",
+          "1,000+ dark stores",
+          "Rapid category expansion"
+        ],
+        "weaknesses": [
+          "Deep losses ₹3,367 crore",
+          "IPO pressure",
+          "Cash burn"
+        ]
+      },
+      "swiggy_instamart": {
+        "strengths": [
+          "Restaurant tie-in",
+          "Brand trust",
+          "316 dark stores added in one quarter"
+        ],
+        "weaknesses": [
+          "Widening losses ₹840 crore",
+          "Slower growth vs Blinkit"
+        ]
+      },
+      "amazon_flipkart": {
+        "status": "Aggressive challengers entering quick commerce",
+        "source": "FounderPin"
+      }
+    }
+  },
+  "user_behavior_signals": {
+    "source": "Inferred from business model and category data",
+    "order_frequency": {
+      "blinkit_peak_day": "7.5 million orders",
+      "daily_estimate": "~20 lakh orders per day (Beta to Alpha)",
+      "source": "FounderPin, Beta to Alpha"
+    },
+    "geographic_behavior": {
+      "metro_concentration": "75% of growth in top 10 cities",
+      "tier_2_expansion": "Piloting Micro-Stores for Tier-2",
+      "source": "FounderPin"
+    },
+    "payment_shift": {
+      "metro_prepaid": "70%",
+      "tier_2_tier_3": "COD to prepaid ongoing",
+      "source": "Product Growth"
+    }
+  },
+  "regulatory_and_risks": {
+    "source": "FounderPin, Digital in Asia",
+    "regulatory_shifts": {
+      "marketing": "Shift from '10-minute' gimmicks to Worker Welfare and Predictable Delivery",
+      "delivery_distance_caps": "Potential lobbying by local trader unions to protect kiranas",
+      "gig_worker_laws": "New labor laws could increase rider payouts by 15%"
+    },
+    "critical_risks": [
+      "Unit economics ceiling - thin margins (~₹30/order)",
+      "Operational fragility - zero room for error in 10-min model",
+      "Hyper-competition from Zepto price wars",
+      "Kirana pushback - delivery distance caps",
+      "Platform outages during peak hours"
+    ]
+  }
+}

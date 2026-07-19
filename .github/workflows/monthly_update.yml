@@ -1,0 +1,67 @@
+name: Monthly Data Refresh & Insights Update
+
+on:
+  schedule:
+    # Run at 00:00 on the 1st day of every month
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+    # Allow manual triggers from the Actions UI
+
+jobs:
+  refresh-data:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-name: '3.11'
+        cache: 'pip'
+
+    - name: Install Python Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run Collection Stage (Scrapers)
+      run: python pipeline/collect.py
+      env:
+        REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+        REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+        REDDIT_USER_AGENT: "BlinkitGrowthInsights/1.0 (by /u/github-actions)"
+
+    - name: Run Cleaning & Hinglish Detection
+      run: python pipeline/clean.py
+
+    - name: Run LLM Tagging & Enrichment
+      run: python pipeline/enrich.py
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+    - name: Run Local Vector Clustering (Sentence-Transformers)
+      run: python pipeline/cluster.py
+      env:
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+    - name: Run Dynamic Analytics Synthesis
+      run: python pipeline/synthesise.py
+
+    - name: Run Pipeline Validation & Metrics
+      run: python pipeline/validate.py
+
+    - name: Commit and Push Updated Insights
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+        # Check if anything changed
+        git add data/ app/data.js validation/
+        if git diff --cached --quiet; then
+          echo "No new insights or verbatims detected. Skipping commit."
+        else
+          git commit -m "Auto-update dynamic insights database [$(date +'%Y-%m-%d')]"
+          git push
+        fi

@@ -1,0 +1,216 @@
+{
+    "exceptional service! reliable deliveries, authentic products, and a seamless shopping experience. blinkit has become my go-to app for everyday essentials.": {
+        "topic": "delivery",
+        "sentiment": "positive",
+        "categories_mentioned": [
+            "other"
+        ],
+        "is_discovery_related": false,
+        "is_trust_related": true,
+        "language": "en",
+        "translated_text": "Exceptional service! Reliable deliveries, authentic products, and a seamless shopping experience. Blinkit has become my go-to app for everyday essentials."
+    },
+    "amazing service! fast delivery, great packaging, and everything arrived on time. very convenient and reliable. keep up the great work, blinkit": {
+        "topic": "delivery",
+        "sentiment": "positive",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "Amazing service! Fast delivery, great packaging, and everything arrived on time. Very convenient and reliable. Keep up the great work, Blinkit"
+    },
+    "one class app hai please isi ko use kare try please 🥺 so very much itni jaldi fast delivery ho jati hai ok bro isi ko use kare": {
+        "topic": "delivery",
+        "sentiment": "positive",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "hinglish",
+        "translated_text": "It's a first-class app, please use it. Try it please 🥺 delivery happens so fast, ok bro use this only"
+    },
+    "very useful app. it is very easy to use it": {
+        "topic": "app-ux",
+        "sentiment": "positive",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "very useful app. it is very easy to use it"
+    },
+    "best app for fast shopping": {
+        "topic": "delivery",
+        "sentiment": "positive",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "best app for fast shopping"
+    },
+    "whenever i ordered something, it was already open": {
+        "topic": "trust",
+        "sentiment": "negative",
+        "categories_mentioned": [
+            "other"
+        ],
+        "is_discovery_related": false,
+        "is_trust_related": true,
+        "language": "en",
+        "translated_text": "Whenever I ordered something, it was open"
+    },
+    "worst in class support team and idiotic order delivery and sorting.": {
+        "topic": "delivery",
+        "sentiment": "negative",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "Worst in class support team and idiotic order delivery and sorting."
+    },
+    "its really useful. some medicines are also available on blinkit which a plus point. and they verify and crosscheck with doctors before giving the medicine. all the other stuff is also on time.": {
+        "topic": "trust",
+        "sentiment": "positive",
+        "categories_mentioned": [
+            "other"
+        ],
+        "is_discovery_related": false,
+        "is_trust_related": true,
+        "language": "en",
+        "translated_text": "its really useful. some medicines are also available on blinkit which a plus point. and they verify and crosscheck with doctors before giving the medicine. all the other stuff is also on time."
+    },
+    "fast delivery, fresh product, and secure packaging. will definitely order again.exactly what i was looking for. great experience with blinkit. thank you!": {
+        "topic": "delivery",
+        "sentiment": "positive",
+        "categories_mentioned": [
+            "groceries-fresh"
+        ],
+        "is_discovery_related": false,
+        "is_trust_related": true,
+        "language": "en",
+        "translated_text": "Fast delivery, fresh product, and secure packaging. Will definitely order again.Exactly what I was looking for. Great experience with Blinkit. Thank you!"
+    },
+    "very good service as well as quality products": {
+        "topic": "trust",
+        "sentiment": "positive",
+        "categories_mentioned": [
+            "other"
+        ],
+        "is_discovery_related": false,
+        "is_trust_related": true,
+        "language": "en",
+        "translated_text": "very good service as well as quality products"
+    },
+    "dilevery boy is so rudeee used bad language": {
+        "topic": "delivery",
+        "sentiment": "negative",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "dilevery boy is so rudeee used bad language"
+    },
+    "very nice app i even got my print at at my home 😍🤩...... but yes take your risk.... your expenditure may increase 😅": {
+        "topic": "pricing",
+        "sentiment": "mixed",
+        "categories_mentioned": [
+            "other"
+        ],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "very nice app I even got my print at at my home 😍🤩...... but yes take your risk.... your expenditure may increase 😅"
+    },
+    "delivered on-time,best in business": {
+        "topic": "delivery",
+        "sentiment": "positive",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "delivered on-time,best in business"
+    },
+    "i'm happy by using this app, it is very helpful for my daily life , it would be better if i had get some more offers 😀": {
+        "topic": "pricing",
+        "sentiment": "mixed",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "I'm happy by using this app, It is very helpful for my daily life , it would be better if i had get some more offers 😀"
+    },
+    "very bad at timing, actual timing is 3x slower than actual one. i think app follow different kind of clock only blinkit can follow": {
+        "topic": "delivery",
+        "sentiment": "negative",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "Very bad at timing, Actual timing is 3x slower than actual one. I think app follow different kind of clock only blinkit can follow"
+    },
+    "okay service i love blinkit": {
+        "topic": "other",
+        "sentiment": "positive",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "okay service i love blinkit"
+    },
+    "your team is performing exceptionally well. i am particularly impressed by the speed with which the doctor's consultation was provided and the medication approved, with the prescriptions now en route. this application is truly a lifesaver. congratulations on achieving such a high level of excellence.": {
+        "topic": "delivery",
+        "sentiment": "positive",
+        "categories_mentioned": [
+            "other"
+        ],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "Your team is performing exceptionally well. I am particularly impressed by the speed with which the doctor's consultation was provided and the medication approved, with the prescriptions now en route. This application is truly a lifesaver. Congratulations on achieving such a high level of excellence."
+    },
+    "nice delivery time 😃 good app": {
+        "topic": "delivery",
+        "sentiment": "positive",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "nice delivery time 😃 good app"
+    },
+    "best online service, response, feedback": {
+        "topic": "other",
+        "sentiment": "positive",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "best online service, response, feedback"
+    },
+    "good service but high handling charges": {
+        "topic": "pricing",
+        "sentiment": "mixed",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "Good service but high Handling charges"
+    },
+    "amazing service by blinkit! 💛 living in a remote area, i never expected essentials to be so easily accessible. whether it's a small everyday item or something bigger, i can order it in just a few clicks and have it delivered with ease. it has made my life so much easier, more convenient, and stress-free. thank you, blinkit, for making everyday living so comfortable! 🙌": {
+        "topic": "delivery",
+        "sentiment": "positive",
+        "categories_mentioned": [
+            "other"
+        ],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "Amazing service by Blinkit! 💛 Living in a remote area, I never expected essentials to be so easily accessible. Whether it's a small everyday item or something bigger, I can order it in just a few clicks and have it delivered with ease. It has made my life so much easier, more convenient, and stress-free. Thank you, Blinkit, for making everyday living so comfortable! 🙌"
+    },
+    "excellent app for last minute": {
+        "topic": "app-ux",
+        "sentiment": "positive",
+        "categories_mentioned": [],
+        "is_discovery_related": false,
+        "is_trust_related": false,
+        "language": "en",
+        "translated_text": "excellent APP for last minute"
+    }
+}

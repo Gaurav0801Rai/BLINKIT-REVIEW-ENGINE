@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blinkit Growth Discovery Engine</title>
+    <!-- Google Fonts: Outfit (headings) and Inter (body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+<body class="spotify-layout">
+    <!-- LEFT SIDEBAR NAV -->
+    <aside class="sidebar">
+        <div class="sidebar-brand-box">
+            <div class="brand-icon-box">
+                <span class="logo-accent">b</span><span class="logo-main">it</span>
+            </div>
+            <div class="brand-text-lines">
+                <span class="brand-line-1">Discovery</span>
+                <span class="brand-line-2">Research Engine</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <button class="nav-item active" id="nav-ask-btn">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/></svg>
+                Ask Assistant
+            </button>
+            <button class="nav-item" id="nav-dash-btn">
+                <svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4 6H9v2h6V9zm-6 4h6v2H9v-2zm8 4H9v2h8v-2z"/></svg>
+                Dashboard
+            </button>
+        </nav>
+        <div class="sidebar-footer">
+            <button class="theme-toggle" id="sync-data-btn" style="margin-bottom: 8px;">
+                <svg class="theme-icon" viewBox="0 0 24 24" id="sync-icon"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                <span>Sync Data</span>
+            </button>
+            <button class="theme-toggle" id="theme-toggle-btn">
+                <svg class="theme-icon" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
+                <span id="theme-btn-lbl">Dark Mode</span>
+            </button>
+        </div>
+    </aside>
+
+    <!-- RIGHT MAIN CONTENT PANEL -->
+    <main class="main-panel">
+        
+        <!-- SECTION 1: ASK AI ASSISTANT VIEW -->
+        <div class="view-section active" id="view-ask">
+            <div class="ask-welcome-container">
+                <h1>What are users saying about category discovery?</h1>
+                <p class="welcome-subtitle">Ask anything or select a key thematic question below to get grounded AI answers.</p>
+            </div>
+
+            <!-- Shortcut Core Questions -->
+            <div class="ask-shortcuts-container">
+                <div id="shortcuts-container">
+                    <!-- Loaded dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- Conversational Chat Thread -->
+            <div class="chat-thread-wrapper">
+                <div class="chat-thread-header">
+                    <span>Chat Log</span>
+                    <button class="clear-btn" id="clear-chat-btn">Clear Chat</button>
+                </div>
+                <div class="chat-thread-container" id="chat-thread">
+                    <div class="empty-state" id="chat-empty-state">
+                        <p>No queries started yet. Ask a custom question below or click a shortcut above.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Prompt Box -->
+            <div class="search-section">
+                <form id="search-form" class="search-box">
+                    <input type="text" id="search-input" placeholder="Ask a custom question (e.g. why users buy dog food or cosmetics)..." required>
+                    <button type="submit" id="search-btn">Ask AI</button>
+                </form>
+                <div style="font-size: 10.5px; color: var(--text-secondary); text-align: center; margin-top: 8px; font-weight: 500;">AI-generated responses may contain inaccuracies.</div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: ANALYTICS DASHBOARD VIEW -->
+        <div class="view-section" id="view-dash">
+            <div class="dashboard-header">
+                <div class="header-meta">
+                    <h2>Discovery Analytics Overview</h2>
+                </div>
+                <button class="refresh-btn" id="refresh-data-btn">Refresh Data</button>
+            </div>
+
+            <!-- Summary KPI Grid showing Ingested Corpus Source Breakdown -->
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <span class="kpi-num" id="kpi-total-reviews">604</span>
+                    <span class="kpi-label">Total Reviews (Cleaned)</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-num" id="kpi-play-store">496</span>
+                    <span class="kpi-label">Play Store</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-num" id="kpi-app-store">15</span>
+                    <span class="kpi-label">App Store</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-num" id="kpi-reddit-forums">29</span>
+                    <span class="kpi-label">Reddit & Forums</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-num" id="kpi-web-search">64</span>
+                    <span class="kpi-label">Web Scrapes & complaints</span>
+                </div>
+            </div>
+
+            <!-- Full Width Pain Points Section (No Sentiment Donut) -->
+            <div class="panel-card full-width">
+                <div class="card-header">
+                    <h3>Top Pain Points (Semantic Clusters)</h3>
+                    <p class="card-subtitle">Two forces suppress category exploration: habit loops that keep users on autopilot, and trust gaps in unfamiliar categories &mdash; freshness, authenticity, and hygiene doubts that make trying a new category feel risky.</p>
+                </div>
+                <ul class="progress-list" id="pain-points-container">
+                    <!-- Populated dynamically -->
+                </ul>
+            </div>
+
+            <!-- Key Insights Section -->
+            <div class="panel-card full-width">
+                <div class="card-header">
+                    <h3>Key Insights</h3>
+                    <p class="card-subtitle">What the data reveals when clusters, volumes, and user needs are read together.</p>
+                </div>
+                <div class="key-insights-container">
+                    <ul class="key-insights-list">
+                        <li>
+                            <span class="insight-num">1</span>
+                            <div class="insight-content">
+                                <strong>Users treat Blinkit as a "refill utility," not a store to browse.</strong> Repeat reorder behavior and search-over-browse habits mean new categories never enter consideration &mdash; the mental model is "get my usual staples fast."
+                            </div>
+                        </li>
+                        <li>
+                            <span class="insight-num">2</span>
+                            <div class="insight-content">
+                                <strong>Non-exploration is driven more by invisible awareness gaps than by stated dissatisfaction.</strong> Exploration-barrier clusters are small precisely because users don't complain about categories they don't know exist &mdash; the loudest problem (habit) hides a quieter one (awareness).
+                            </div>
+                        </li>
+                        <li>
+                            <span class="insight-num">3</span>
+                            <div class="insight-content">
+                                <strong>When users do consider a new category, trust &mdash; not price &mdash; is the dealbreaker.</strong> Barriers cluster around freshness, authenticity, hygiene, and stock reliability, not cost; users won't risk an unfamiliar category they don't trust to deliver quality.
+                            </div>
+                        </li>
+                        <li>
+                            <span class="insight-num">4</span>
+                            <div class="insight-content">
+                                <strong>The habit that drives retention is the same habit that blocks growth.</strong> The reorder shortcut that makes users loyal and frequent is exactly what keeps their basket narrow and static.
+                            </div>
+                        </li>
+                        <li>
+                            <span class="insight-num">5</span>
+                            <div class="insight-content">
+                                <strong>Discovery must be pushed to the user, because the user will never pull it.</strong> A habit-locked user on autopilot won't go searching for new categories &mdash; the platform must surface relevance proactively.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Row: Top User Needs -->
+            <div class="panel-card full-width">
+                <div class="card-header">
+                    <h3>Top User Needs & Actionable Insights</h3>
+                    <p class="card-subtitle">Direct requests and opportunities mapped from our data corpus.</p>
+                </div>
+                <div class="needs-split-container">
+                    <div class="needs-block">
+                        <h4>Discovery & Convenience Opportunities</h4>
+                        <ul class="needs-list" id="needs-discovery-list">
+                            <!-- Populated dynamically -->
+                        </ul>
+                    </div>
+                    <div class="needs-block">
+                        <h4>UX & Control Enhancements</h4>
+                        <ul class="needs-list" id="needs-control-list">
+                            <!-- Populated dynamically -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Absence problem warnings -->
+            <div class="warning-banner-card">
+                <strong>Structural Note (The Absence Problem):</strong> This dashboard represents feedback from users who attempted transactions and reported friction. Discovery constraints where users are completely unaware that categories exist are underrepresented here. Proactive marketing visual cues (widgets, sample push triggers) must be deployed to drive trial rate.
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Slide-out Drawer for Citation Details -->
+    <div class="drawer-overlay" id="drawer-overlay"></div>
+    <div class="drawer" id="citation-drawer">
+        <div class="drawer-header">
+            <h3>Citation Verbatim Details</h3>
+            <button class="drawer-close" id="drawer-close-btn">&times;</button>
+        </div>
+        <div class="drawer-body" id="drawer-body">
+            <!-- Details filled dynamically -->
+        </div>
+    </div>
+
+    <!-- Chatbot API Key Config -->
+    <script src="config.js?v=1"></script>
+    <!-- Data script bundle -->
+    <script src="data.js?v=3"></script>
+    <!-- Combined App Logic Controller -->
+    <script src="app.js?v=6"></script>
+</body>
+</html>

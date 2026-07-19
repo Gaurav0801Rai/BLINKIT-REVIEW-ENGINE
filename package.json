@@ -1,0 +1,16 @@
+{
+  "name": "blinkit-growth-insights",
+  "version": "1.0.0",
+  "description": "Blinkit Category Discovery Insights & RAG Engine",
+  "main": "app/index.html",
+  "scripts": {
+    "dev": "npx -y http-server ./app -p 5173 -o"
+  },
+  "keywords": [
+    "blinkit",
+    "insights",
+    "dashboard"
+  ],
+  "author": "Antigravity",
+  "license": "ISC"
+}

@@ -1,0 +1,17 @@
+{
+    "funnel_funnel": {
+        "1_raw_collected": 4129,
+        "2_deduplicated": 2457,
+        "3_cleaned_final": 1411
+    },
+    "exclusions": {
+        "duplicate_ids": 0,
+        "duplicate_texts": 1672,
+        "emoji_only": 49,
+        "short_text_under_25_chars": 997
+    },
+    "language_distribution": {
+        "en": 1191,
+        "hinglish": 220
+    }
+}
