@@ -63,7 +63,7 @@ Instructions:
 
     const options = {
         hostname: 'generativelanguage.googleapis.com',
-        path: `/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+        path: `/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
