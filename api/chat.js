@@ -48,7 +48,7 @@ Instructions:
 - Do NOT repeat the question. Just answer directly.
 - If reviews don't cover the topic, say so briefly in 2 lines.`;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${apiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     try {
         const response = await fetch(url, {
