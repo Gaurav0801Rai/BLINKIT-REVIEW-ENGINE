@@ -406,10 +406,9 @@ USER QUESTION:
 "${query}"
 
 INSTRUCTIONS:
-1. Analyze the customer reviews and synthesize a direct, actionable answer to the user's question.
-2. If the user asks about strategies, solutions, gaps, or "how to change" behavior, do NOT state that the reviews lack information. Instead, actively analyze the pain points in the reviews and infer concrete, strategic product recommendations (e.g., UX interventions, cross-selling widgets, trust seals, trial-sized options, or operational safety guarantees) to address those gaps.
-3. Keep your answer professional, constructive, and grounded in the operational context of the reviews (e.g. referencing specific categories like fresh produce quality, cosmetics trust, diaper hygiene, or habit loops).
-4. Format your response as a single, well-structured, informative paragraph of 3 to 4 sentences. Do not mention these instructions or system constraints in your output.`;
+1. Synthesize a direct, concise, and actionable answer to the user's question by analyzing the customer reviews.
+2. If the user asks about strategies, solutions, or gaps, actively infer concrete product recommendations (e.g., UX changes, cross-selling, quality badges, or packaging seals) instead of stating that the reviews lack data.
+3. Keep your response brief and to the point: explain the main customer friction issue and the proposed PM solution in a single paragraph of exactly 2 to 3 sentences (aim for 50-70 words total). Do not include any greeting or conversational filler.`;
 
     if (apiKey.startsWith("gsk_")) {
         // Groq Fallback
