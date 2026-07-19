@@ -378,7 +378,7 @@ async function callGeminiAPI(query, contextReviews) {
     // Client-side fallback (useful for local static dev servers like http-server)
     let apiKey = window.CHATBOT_API_KEY || localStorage.getItem("GEMINI_CHAT_API_KEY") || new URLSearchParams(window.location.search).get("key");
     if (!apiKey) {
-        const userKey = prompt("To enable the AI Chatbot, please paste your Gemini API Key (saved securely in your browser's local storage):");
+        const userKey = prompt("To enable the AI Chatbot, please paste your Groq API Key (starts with gsk_) or Gemini API Key:");
         if (userKey && userKey.trim()) {
             localStorage.setItem("GEMINI_CHAT_API_KEY", userKey.trim());
             apiKey = userKey.trim();
@@ -407,24 +407,51 @@ INSTRUCTIONS:
 3. Keep your answer professional, constructive, and grounded in the operational context of the reviews (e.g. referencing specific categories like fresh produce quality, cosmetics trust, diaper hygiene, or habit loops).
 4. Format your response as a single, well-structured, informative paragraph of 3 to 4 sentences. Do not mention these instructions or system constraints in your output.`;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
-    const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.4, maxOutputTokens: 1000 }
-        })
-    });
-    
-    if (!response.ok) {
-        const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.error?.message || `API error ${response.status}`);
+    if (apiKey.startsWith("gsk_")) {
+        // Groq Fallback
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "llama-3.3-70b-versatile",
+                messages: [{ role: "user", content: prompt }],
+                temperature: 0.4,
+                max_tokens: 500
+            })
+        });
+
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `Groq API error ${response.status}`);
+        }
+
+        const data = await response.json();
+        const answer = data.choices?.[0]?.message?.content || "";
+        return answer.trim().replace(/\n/g, "<br>");
+    } else {
+        // Gemini Fallback
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+        const response = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { temperature: 0.4, maxOutputTokens: 1000 }
+            })
+        });
+        
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.error?.message || `API error ${response.status}`);
+        }
+        
+        const data = await response.json();
+        const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        return answer.trim().replace(/\n/g, "<br>");
     }
-    
-    const data = await response.json();
-    const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    return answer.trim().replace(/\n/g, "<br>");
 }
 
 // Trigger core preset question — now uses LLM
