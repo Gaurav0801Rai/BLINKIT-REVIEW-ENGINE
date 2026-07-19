@@ -334,6 +334,32 @@ function getMatchingReviews(query) {
 
 // Call Gemini API with context reviews and user question
 async function callGeminiAPI(query, contextReviews) {
+    try {
+        // Try calling the secure backend serverless API proxy first
+        const response = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ query, contextReviews })
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            const answer = data.answer || "";
+            const lines = answer.split("\n").map(l => l.trim()).filter(l => l.length > 0);
+            return lines.slice(0, 4).join("<br>");
+        }
+        
+        // If the serverless endpoint is not found (status 404, e.g., running static http-server locally),
+        // we fall back to client-side API calls.
+        if (response.status !== 404) {
+            const errData = await response.json().catch(() => ({}));
+            throw new Error(errData.error || `Server error ${response.status}`);
+        }
+    } catch (apiErr) {
+        console.warn("Secure backend API unavailable, attempting client-side fallback...", apiErr);
+    }
+
+    // Client-side fallback (useful for local static dev servers like http-server)
     let apiKey = window.CHATBOT_API_KEY || localStorage.getItem("GEMINI_CHAT_API_KEY") || new URLSearchParams(window.location.search).get("key");
     if (!apiKey) {
         const userKey = prompt("To enable the AI Chatbot, please paste your Gemini API Key (saved securely in your browser's local storage):");
@@ -379,8 +405,6 @@ Instructions:
     
     const data = await response.json();
     const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    
-    // Trim to max 4 lines
     const lines = answer.split("\n").map(l => l.trim()).filter(l => l.length > 0);
     return lines.slice(0, 4).join("<br>");
 }
