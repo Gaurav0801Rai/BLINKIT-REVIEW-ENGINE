@@ -77,10 +77,13 @@ INSTRUCTIONS:
                 const answer = parsed.choices?.[0]?.message?.content || "";
                 return res.status(200).json({ answer });
             } else {
-                console.warn(`Groq request failed with status ${result.statusCode}: ${result.body}`);
+                return res.status(result.statusCode).json({
+                    error: `Groq API returned status ${result.statusCode}`,
+                    details: result.body
+                });
             }
         } catch (err) {
-            console.error("Groq request error:", err);
+            return res.status(500).json({ error: `Groq request error: ${err.message}` });
         }
     }
 
