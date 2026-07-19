@@ -1,3 +1,5 @@
+const https = require('https');
+
 module.exports = async (req, res) => {
     // CORS Headers
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -18,17 +20,23 @@ module.exports = async (req, res) => {
         return res.status(405).json({ error: 'Method Not Allowed' });
     }
 
-    const { query, contextReviews } = req.body;
-    
-    // Support multiple comma-separated keys rotation in server environment variables
+    // Safely parse body in case Vercel body parser returns string or is bypassed
+    let body = req.body;
+    if (typeof body === 'string') {
+        try {
+            body = JSON.parse(body);
+        } catch (e) {}
+    }
+    const { query, contextReviews } = body || {};
+
     const apiKeyEnv = process.env.GEMINI_API_KEY;
     const apiKeys = apiKeyEnv ? apiKeyEnv.split(',').map(k => k.trim()).filter(Boolean) : [];
 
     if (apiKeys.length === 0) {
-        return res.status(500).json({ error: 'GEMINI_API_KEY environment variable is not configured on the server.' });
+        return res.status(500).json({ error: 'GEMINI_API_KEY environment variable is not configured on Vercel.' });
     }
 
-    // Select a key randomly or sequentially based on timestamp to distribute load
+    // Rotate keys
     const apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
 
     const reviewsText = (contextReviews || []).map((r, i) => 
@@ -48,27 +56,51 @@ Instructions:
 - Do NOT repeat the question. Just answer directly.
 - If reviews don't cover the topic, say so briefly in 2 lines.`;
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+    const requestData = JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.4, maxOutputTokens: 200 }
+    });
 
-    try {
-        const response = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: { temperature: 0.4, maxOutputTokens: 200 }
-            })
+    const options = {
+        hostname: 'generativelanguage.googleapis.com',
+        path: `/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Content-Length': Buffer.byteLength(requestData)
+        }
+    };
+
+    const apiRequest = https.request(options, (apiRes) => {
+        let responseBody = '';
+        apiRes.on('data', (chunk) => {
+            responseBody += chunk;
         });
 
-        if (!response.ok) {
-            const errData = await response.json().catch(() => ({}));
-            return res.status(response.status).json({ error: errData.error?.message || 'Gemini API call failed' });
-        }
+        apiRes.on('end', () => {
+            if (apiRes.statusCode >= 400) {
+                let errMsg = 'Gemini API call failed';
+                try {
+                    const parsed = JSON.parse(responseBody);
+                    errMsg = parsed.error?.message || errMsg;
+                } catch (e) {}
+                return res.status(apiRes.statusCode).json({ error: errMsg });
+            }
 
-        const data = await response.json();
-        const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-        res.status(200).json({ answer });
-    } catch (err) {
+            try {
+                const parsed = JSON.parse(responseBody);
+                const answer = parsed.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                res.status(200).json({ answer });
+            } catch (err) {
+                res.status(500).json({ error: 'Failed to parse API response' });
+            }
+        });
+    });
+
+    apiRequest.on('error', (err) => {
         res.status(500).json({ error: err.message });
-    }
+    });
+
+    apiRequest.write(requestData);
+    apiRequest.end();
 };
