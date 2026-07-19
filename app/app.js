@@ -390,8 +390,8 @@ async function callGeminiAPI(query, contextReviews) {
     const reviewsText = contextReviews.map((r, i) => 
         `[${i+1}] (${r.source}, Rating: ${r.rating || 'N/A'}): "${r.text}"`
     ).join("\n");
-    const prompt = `You are a helpful customer research assistant analyzing reviews for Blinkit.
-Below are relevant customer reviews to help answer the question.
+    const prompt = `You are a strategic growth analyst and product manager for Blinkit.
+Below is a selection of real customer reviews/feedback describing pain points, habits, and friction.
 
 ---
 CUSTOMER REVIEWS:
@@ -402,9 +402,10 @@ USER QUESTION:
 "${query}"
 
 INSTRUCTIONS:
-1. Provide a direct, specific answer to the user's question using the customer reviews provided.
-2. If the reviews don't cover the topic, state that clearly in 1-2 lines.
-3. Keep your response brief, informative, and formatted as a single clear paragraph of 3-4 sentences. Do not mention any prompt constraints or formatting instructions in your output.`;
+1. Analyze the customer reviews and synthesize a direct, actionable answer to the user's question.
+2. If the user asks about strategies, solutions, gaps, or "how to change" behavior, do NOT state that the reviews lack information. Instead, actively analyze the pain points in the reviews and infer concrete, strategic product recommendations (e.g., UX interventions, cross-selling widgets, trust seals, trial-sized options, or operational safety guarantees) to address those gaps.
+3. Keep your answer professional, constructive, and grounded in the operational context of the reviews (e.g. referencing specific categories like fresh produce quality, cosmetics trust, diaper hygiene, or habit loops).
+4. Format your response as a single, well-structured, informative paragraph of 3 to 4 sentences. Do not mention these instructions or system constraints in your output.`;
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`;
     const response = await fetch(url, {
