@@ -334,8 +334,16 @@ function getMatchingReviews(query) {
 
 // Call Gemini API with context reviews and user question
 async function callGeminiAPI(query, contextReviews) {
-    const apiKey = window.CHATBOT_API_KEY;
-    if (!apiKey) throw new Error("No chatbot API key configured.");
+    let apiKey = window.CHATBOT_API_KEY || localStorage.getItem("GEMINI_CHAT_API_KEY") || new URLSearchParams(window.location.search).get("key");
+    if (!apiKey) {
+        const userKey = prompt("To enable the AI Chatbot, please paste your Gemini API Key (saved securely in your browser's local storage):");
+        if (userKey && userKey.trim()) {
+            localStorage.setItem("GEMINI_CHAT_API_KEY", userKey.trim());
+            apiKey = userKey.trim();
+        } else {
+            throw new Error("No chatbot API key configured.");
+        }
+    }
     
     const reviewsText = contextReviews.map((r, i) => 
         `[${i+1}] (${r.source}, Rating: ${r.rating || 'N/A'}): "${r.text}"`
