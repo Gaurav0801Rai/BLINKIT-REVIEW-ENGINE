@@ -1,0 +1,11 @@
+# Exclude python pipeline environment and dependencies from Vercel deployment
+requirements.txt
+pipeline/
+validation/
+docs/
+data/
+.env
+.gitignore
+task.md
+implementation_plan.md
+blinkit_web_search_data_only.json
