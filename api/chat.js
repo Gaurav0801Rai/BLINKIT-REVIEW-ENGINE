@@ -36,9 +36,6 @@ module.exports = async (req, res) => {
         return res.status(500).json({ error: 'GEMINI_API_KEY environment variable is not configured on Vercel.' });
     }
 
-    // Rotate keys
-    const apiKey = apiKeys[Math.floor(Math.random() * apiKeys.length)];
-
     const reviewsText = (contextReviews || []).map((r, i) => 
         `[${i+1}] (${r.source}, Rating: ${r.rating || 'N/A'}): "${r.text}"`
     ).join("\n");
@@ -65,46 +62,75 @@ INSTRUCTIONS:
         generationConfig: { temperature: 0.4, maxOutputTokens: 1000 }
     });
 
-    const options = {
-        hostname: 'generativelanguage.googleapis.com',
-        path: `/v1beta/models/gemini-flash-latest:generateContent?key=${apiKey}`,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(requestData)
-        }
-    };
+    // Try keys one by one until one succeeds (helps survive rate limits and bad keys)
+    let responseBody = '';
+    let success = false;
+    let lastError = 'Gemini API call failed';
+    let statusCode = 500;
 
-    const apiRequest = https.request(options, (apiRes) => {
-        let responseBody = '';
-        apiRes.on('data', (chunk) => {
-            responseBody += chunk;
-        });
+    const shuffledKeys = [...apiKeys].sort(() => Math.random() - 0.5);
 
-        apiRes.on('end', () => {
-            if (apiRes.statusCode >= 400) {
-                let errMsg = 'Gemini API call failed';
+    for (const apiKey of shuffledKeys) {
+        try {
+            const result = await makeRequest(apiKey, requestData);
+            statusCode = result.statusCode;
+            responseBody = result.body;
+            
+            if (statusCode === 200) {
+                success = true;
+                break;
+            } else {
                 try {
                     const parsed = JSON.parse(responseBody);
-                    errMsg = parsed.error?.message || errMsg;
+                    lastError = parsed.error?.message || lastError;
                 } catch (e) {}
-                return res.status(apiRes.statusCode).json({ error: errMsg });
             }
+        } catch (err) {
+            lastError = err.message;
+        }
+    }
 
-            try {
-                const parsed = JSON.parse(responseBody);
-                const answer = parsed.candidates?.[0]?.content?.parts?.[0]?.text || "";
-                res.status(200).json({ answer });
-            } catch (err) {
-                res.status(500).json({ error: 'Failed to parse API response' });
-            }
-        });
-    });
+    if (!success) {
+        return res.status(statusCode).json({ error: lastError });
+    }
 
-    apiRequest.on('error', (err) => {
-        res.status(500).json({ error: err.message });
-    });
-
-    apiRequest.write(requestData);
-    apiRequest.end();
+    // Parse successful response
+    try {
+        const parsed = JSON.parse(responseBody);
+        const answer = parsed.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        res.status(200).json({ answer });
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to parse API response' });
+    }
 };
+
+// Helper function to make the HTTPS request to Gemini API
+function makeRequest(apiKey, requestData) {
+    return new Promise((resolve, reject) => {
+        const options = {
+            hostname: 'generativelanguage.googleapis.com',
+            // Using gemini-2.0-flash to respond instantly (preventing Vercel serverless timeout errors)
+            path: `/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(requestData)
+            }
+        };
+
+        const apiRequest = https.request(options, (apiRes) => {
+            let body = '';
+            apiRes.on('data', (chunk) => { body += chunk; });
+            apiRes.on('end', () => {
+                resolve({ statusCode: apiRes.statusCode, body });
+            });
+        });
+
+        apiRequest.on('error', (err) => {
+            reject(err);
+        });
+
+        apiRequest.write(requestData);
+        apiRequest.end();
+    });
+}
