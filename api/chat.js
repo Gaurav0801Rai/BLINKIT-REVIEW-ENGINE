@@ -29,13 +29,6 @@ module.exports = async (req, res) => {
     }
     const { query, contextReviews } = body || {};
 
-    const apiKeyEnv = process.env.GEMINI_API_KEY;
-    const apiKeys = apiKeyEnv ? apiKeyEnv.split(',').map(k => k.trim()).filter(Boolean) : [];
-
-    if (apiKeys.length === 0) {
-        return res.status(500).json({ error: 'GEMINI_API_KEY environment variable is not configured on Vercel.' });
-    }
-
     const reviewsText = (contextReviews || []).map((r, i) => 
         `[${i+1}] (${r.source}, Rating: ${r.rating || 'N/A'}): "${r.text}"`
     ).join("\n");
@@ -57,22 +50,47 @@ INSTRUCTIONS:
 3. Keep your answer professional, constructive, and grounded in the operational context of the reviews (e.g. referencing specific categories like fresh produce quality, cosmetics trust, diaper hygiene, or habit loops).
 4. Format your response as a single, well-structured, informative paragraph of 3 to 4 sentences. Do not mention these instructions or system constraints in your output.`;
 
+    const groqApiKey = process.env.GROQ_API_KEY;
+    
+    // 1. Prioritize Groq if a Groq key is configured on Vercel
+    if (groqApiKey) {
+        try {
+            const result = await makeGroqRequest(groqApiKey, prompt);
+            if (result.statusCode === 200) {
+                const parsed = JSON.parse(result.body);
+                const answer = parsed.choices?.[0]?.message?.content || "";
+                return res.status(200).json({ answer });
+            } else {
+                console.warn(`Groq request failed with status ${result.statusCode}: ${result.body}`);
+            }
+        } catch (err) {
+            console.error("Groq request error:", err);
+        }
+    }
+
+    // 2. Fall back to Gemini Key Rotation
+    const apiKeyEnv = process.env.GEMINI_API_KEY;
+    const apiKeys = apiKeyEnv ? apiKeyEnv.split(',').map(k => k.trim()).filter(Boolean) : [];
+
+    if (apiKeys.length === 0) {
+        return res.status(500).json({ error: 'Neither GROQ_API_KEY nor GEMINI_API_KEY is configured on Vercel.' });
+    }
+
     const requestData = JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: { temperature: 0.4, maxOutputTokens: 1000 }
     });
 
-    // Try keys one by one until one succeeds (helps survive rate limits and bad keys)
     let responseBody = '';
     let success = false;
-    let lastError = 'Gemini API call failed';
+    let lastError = 'API calls failed due to rate limits or quota depletion';
     let statusCode = 500;
 
     const shuffledKeys = [...apiKeys].sort(() => Math.random() - 0.5);
 
     for (const apiKey of shuffledKeys) {
         try {
-            const result = await makeRequest(apiKey, requestData);
+            const result = await makeGeminiRequest(apiKey, requestData);
             statusCode = result.statusCode;
             responseBody = result.body;
             
@@ -104,12 +122,49 @@ INSTRUCTIONS:
     }
 };
 
+// Helper function to make the HTTPS request to Groq API
+function makeGroqRequest(apiKey, promptText) {
+    const requestData = JSON.stringify({
+        model: "llama-3.3-70b-versatile",
+        messages: [{ role: "user", content: promptText }],
+        temperature: 0.4,
+        max_tokens: 500
+    });
+
+    return new Promise((resolve, reject) => {
+        const options = {
+            hostname: 'api.groq.com',
+            path: '/openai/v1/chat/completions',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`,
+                'Content-Length': Buffer.byteLength(requestData)
+            }
+        };
+
+        const apiRequest = https.request(options, (apiRes) => {
+            let body = '';
+            apiRes.on('data', (chunk) => { body += chunk; });
+            apiRes.on('end', () => {
+                resolve({ statusCode: apiRes.statusCode, body });
+            });
+        });
+
+        apiRequest.on('error', (err) => {
+            reject(err);
+        });
+
+        apiRequest.write(requestData);
+        apiRequest.end();
+    });
+}
+
 // Helper function to make the HTTPS request to Gemini API
-function makeRequest(apiKey, requestData) {
+function makeGeminiRequest(apiKey, requestData) {
     return new Promise((resolve, reject) => {
         const options = {
             hostname: 'generativelanguage.googleapis.com',
-            // Using gemini-2.0-flash to respond instantly (preventing Vercel serverless timeout errors)
             path: `/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
             method: 'POST',
             headers: {
