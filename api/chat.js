@@ -66,7 +66,9 @@ INSTRUCTIONS:
 3. Keep your answer professional, constructive, and grounded in the operational context of the reviews (e.g. referencing specific categories like fresh produce quality, cosmetics trust, diaper hygiene, or habit loops).
 4. Format your response as a single, well-structured, informative paragraph of 3 to 4 sentences. Do not mention these instructions or system constraints in your output.`;
 
-    const groqApiKey = process.env.GROQ_API_KEY || (clientApiKey && clientApiKey.startsWith("gsk_") ? clientApiKey : null);
+    // Prioritize server environment variables, fallback to client-forwarded keys (with trimming to safeguard against copy-paste whitespace)
+    const rawGroqKey = process.env.GROQ_API_KEY || (clientApiKey && clientApiKey.startsWith("gsk_") ? clientApiKey : null);
+    const groqApiKey = rawGroqKey ? rawGroqKey.trim() : null;
     
     // 1. Prioritize Groq if a Groq key is configured
     if (groqApiKey) {
@@ -78,7 +80,7 @@ INSTRUCTIONS:
                 return res.status(200).json({ answer });
             } else {
                 return res.status(result.statusCode).json({
-                    error: `Groq API returned status ${result.statusCode}`,
+                    error: `Groq API returned status ${result.statusCode} (Key used: ${groqApiKey ? groqApiKey.substring(0, 10) : 'none'}...)`,
                     details: result.body
                 });
             }
