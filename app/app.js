@@ -352,11 +352,12 @@ function getMatchingReviews(query) {
 // Call Gemini API with context reviews and user question
 async function callGeminiAPI(query, contextReviews) {
     try {
-        // Try calling the secure backend serverless API proxy first
+        // Forward client-side API key if Vercel server environment variables are not yet propagated
+        const clientApiKey = window.CHATBOT_API_KEY || localStorage.getItem("GEMINI_CHAT_API_KEY") || new URLSearchParams(window.location.search).get("key");
         const response = await fetch("/api/chat", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query, contextReviews })
+            body: JSON.stringify({ query, contextReviews, clientApiKey })
         });
         
         if (response.ok) {
@@ -365,8 +366,11 @@ async function callGeminiAPI(query, contextReviews) {
             return answer.trim().replace(/\n/g, "<br>");
         }
         
-        // If the serverless endpoint is not found (status 404, e.g., running static http-server locally),
-        // we fall back to client-side API calls.
+        // Clear local storage key if it's rate-limited (429) or unauthorized (401/403) to trigger prompting for a new key
+        if (response.status === 429 || response.status === 401 || response.status === 403) {
+            localStorage.removeItem("GEMINI_CHAT_API_KEY");
+        }
+
         if (response.status !== 404) {
             const errData = await response.json().catch(() => ({}));
             throw new Error(errData.error || `Server error ${response.status}`);

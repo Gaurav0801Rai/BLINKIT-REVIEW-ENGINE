@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
             body = JSON.parse(body);
         } catch (e) {}
     }
-    const { query, contextReviews } = body || {};
+    const { query, contextReviews, clientApiKey } = body || {};
 
     const reviewsText = (contextReviews || []).map((r, i) => 
         `[${i+1}] (${r.source}, Rating: ${r.rating || 'N/A'}): "${r.text}"`
@@ -50,9 +50,10 @@ INSTRUCTIONS:
 3. Keep your answer professional, constructive, and grounded in the operational context of the reviews (e.g. referencing specific categories like fresh produce quality, cosmetics trust, diaper hygiene, or habit loops).
 4. Format your response as a single, well-structured, informative paragraph of 3 to 4 sentences. Do not mention these instructions or system constraints in your output.`;
 
-    const groqApiKey = process.env.GROQ_API_KEY;
+    // Prioritize server environment variables, fallback to client-forwarded keys
+    const groqApiKey = process.env.GROQ_API_KEY || (clientApiKey && clientApiKey.startsWith("gsk_") ? clientApiKey : null);
     
-    // 1. Prioritize Groq if a Groq key is configured on Vercel
+    // 1. Prioritize Groq if a Groq key is configured
     if (groqApiKey) {
         try {
             const result = await makeGroqRequest(groqApiKey, prompt);
@@ -69,7 +70,7 @@ INSTRUCTIONS:
     }
 
     // 2. Fall back to Gemini Key Rotation
-    const apiKeyEnv = process.env.GEMINI_API_KEY;
+    const apiKeyEnv = process.env.GEMINI_API_KEY || (clientApiKey && !clientApiKey.startsWith("gsk_") ? clientApiKey : null);
     const apiKeys = apiKeyEnv ? apiKeyEnv.split(',').map(k => k.trim()).filter(Boolean) : [];
 
     if (apiKeys.length === 0) {
