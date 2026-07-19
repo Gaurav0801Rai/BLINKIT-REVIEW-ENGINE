@@ -1,11 +1,6 @@
 {
   "cleanUrls": true,
-  "builds": [
-    { "src": "api/chat.js", "use": "@vercel/node" },
-    { "src": "app/**", "use": "@vercel/static" }
-  ],
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/((?!api/).*)", "destination": "/app/$1" }
   ]
 }
